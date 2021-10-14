@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js" defer></script>
+    <title>My todo list</title>
+  </head>
+  <body>
+    <section id="main">
+      <header>
+        <h2><span>To do </span> List</h2>
+        <button class="add-btn">new</button>
+      </header>
+      <main>
+        <div id="clock">0.0</div>
+        <div class="tasks-container">
+          <ul>
+            <li class="task-order">
+              <input
+                type="number"
+                id="task-time"
+                placeholder="set task mintes"
+              />
+              <input type="text" placeholder="add a task" id="task-name" />
+              <button class="start-btn">add new task</button>
+            </li>
+          </ul>
+        </div>
+      </main>
+    </section>
+  </body>
+</html>
