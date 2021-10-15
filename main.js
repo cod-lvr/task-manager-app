@@ -1,38 +1,47 @@
 class Clock {
   constructor(tag, minute) {
     this.tag = tag;
-    this.minute = +minute;
-    this.second = 59;
+    this.minute = minute;
     this.timeOutId = undefined;
     this.displayClock();
   }
 
+  timeConvert() {
+    this.hours = this.minute / 60;
+    this.rhours = Math.floor(this.hours);
+    this.minutes = (this.hours - this.rhours) * 60;
+    return (this.rminutes = Math.round(this.minutes));
+  }
+
   displayClock() {
-    if ((this.second > 0 && this.minute > 0) || this.minute == 0) {
-      this.second--;
-    }
-    if (this.minute == 1) {
-      this.minute = 0;
-    }
-    if (this.second == 0) {
-      this.second = 59;
-      this.minute--;
+    if (this.rminutes < 10) {
+      this.rminutes = "0" + this.rminutes;
     }
 
+    this.docDisplay(this.minute, this.rminutes);
+
+    if (this.rminutes == 0) {
+      this.cancelTimeOut();
+      this.docDisplay(0, 0);
+    }
+    this.rminutes--;
+    this.startTimeOut();
+  }
+
+  docDisplay(min, sec) {
     document.getElementById(this.tag).innerHTML = `
-    ${this.minute} : ${this.second}
+    ${min} : ${sec}
     `;
+  }
 
+  startTimeOut() {
     this.timeOutId = setTimeout(() => {
       this.displayClock();
     }, 1000);
   }
 
   cancelTimeOut() {
-    if (this.minute < 0 && this.second == 0) {
-      console.log("worked");
-      this.timeOutId = clearsetTimeout(this.timeOutId);
-    }
+    clearTimeout(this.timeOutId);
   }
 }
 
@@ -47,6 +56,7 @@ class Task {
 
   createNewTask() {
     this.tasks = [...this.tasks, this.taskId];
+
     const taskList = document.querySelector(".tasks-container ul");
     const taskEl = document.createElement("li");
     taskEl.className = "task";
@@ -55,8 +65,10 @@ class Task {
             <h2>${this.taskName}</h2>
             <button class="start-btn">start</button>
         `;
+
     const startBtn = taskEl.querySelector("button");
     // startBtn.addEventListener("click");
+
     taskList.append(taskEl);
     this.clockCounter();
   }
@@ -84,17 +96,19 @@ class TaskHandler {
 class App {
   static init() {
     let taskName = document.querySelector("input#task-name");
-    let tasktime = document.querySelector("input#task-time");
+    let taskTime = document.querySelector("input#task-time");
 
-    // validate userInput
-    if (taskName.value.trim() !== 0 && tasktime.value <= 0) {
+    const taskNameValue = taskName.value;
+    const taskTimeValue = taskTime.value;
+
+    if (taskNameValue.trim() !== 0 && isNaN(taskTimeValue)) {
       return;
     }
 
-    const addTask = new Task(taskName.value, tasktime.value);
+    const addTask = new Task(taskNameValue, taskTimeValue);
     addTask.createNewTask();
     taskName.value = "";
-    tasktime.value = "";
+    taskTime.value = "";
   }
 }
 
