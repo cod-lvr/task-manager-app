@@ -85,17 +85,21 @@ li.task-order {
 li.task {
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
   padding: 0.4rem 2rem;
   background-color: #550055;
   border-radius: 48px;
   box-shadow: 0 5px 2px #c700c7;
   margin: 2rem 0;
+  color: #fff;
+  text-transform: capitalize;
 }
 #radio {
-  padding: 2rem;
-  border-radius: 20%;
-  background-color: #f4f4f4;
+  padding: 1rem;
+  border: 5px double #c700c7;
+  border-radius: 19px;
+  background-color: #550055a9;
+  color: #fff;
 }
 input#task-name {
   padding: 1.2rem 0;
@@ -157,10 +161,5 @@ input#task-time {
     background-color: #c700c7;
     border-radius: 48px;
     box-shadow: 0 5px 2px #550055;
-  }
-  #radio {
-    padding: 1rem;
-    border-radius: 20%;
-    background-color: #f4f4f4;
   }
 }

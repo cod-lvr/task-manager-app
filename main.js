@@ -2,46 +2,43 @@ class Clock {
   constructor(tag, minute) {
     this.tag = tag;
     this.minute = minute;
-    this.timeOutId = undefined;
-    this.displayClock();
+    this.timeOutId;
+    this.startClock();
+  }
+
+  startClock() {
+    this.timeConvert();
+    this.clockTimer();
   }
 
   timeConvert() {
-    this.hours = this.minute / 60;
-    this.rhours = Math.floor(this.hours);
-    this.minutes = (this.hours - this.rhours) * 60;
+    this.rhours = Math.floor(this.minute / 60);
+    this.minutes = (this.minute - this.rhours) * 60;
     return (this.rminutes = Math.round(this.minutes));
   }
 
-  displayClock() {
+  clockTimer() {
     if (this.rminutes < 10) {
-      this.rminutes = "0" + this.rminutes;
+      this.rminutes = ` 0${this.rminutes}`;
     }
-
-    this.docDisplay(this.minute, this.rminutes);
 
     if (this.rminutes == 0) {
-      this.cancelTimeOut();
-      this.docDisplay(0, 0);
+      return;
     }
+
+    document.getElementById(
+      this.tag
+    ).innerHTML = `Secounds Left : ${this.rminutes} `;
+
     this.rminutes--;
+
     this.startTimeOut();
   }
 
-  docDisplay(min, sec) {
-    document.getElementById(this.tag).innerHTML = `
-    ${min} : ${sec}
-    `;
-  }
-
   startTimeOut() {
-    this.timeOutId = setTimeout(() => {
-      this.displayClock();
-    }, 1000);
-  }
-
-  cancelTimeOut() {
-    clearTimeout(this.timeOutId);
+    this.timeOutId = setInterval(() => {
+      this.clockTimer();
+    }, 100);
   }
 }
 
@@ -51,6 +48,7 @@ class Task {
   constructor(taskName, taskTime) {
     this.taskName = taskName;
     this.taskTime = taskTime;
+    this.btnStatus = "start";
     this.taskId = Math.round(Math.random() * 6);
   }
 
@@ -61,9 +59,9 @@ class Task {
     const taskEl = document.createElement("li");
     taskEl.className = "task";
     taskEl.innerHTML = `
-            <span id="radio">${this.taskTime}</span>
+            <span id="radio">minutes: ${this.taskTime}</span>
             <h2>${this.taskName}</h2>
-            <button class="start-btn">start</button>
+            <button class="start-btn">${this.btnStatus}</button>
         `;
 
     const startBtn = taskEl.querySelector("button");
@@ -98,14 +96,11 @@ class App {
     let taskName = document.querySelector("input#task-name");
     let taskTime = document.querySelector("input#task-time");
 
-    const taskNameValue = taskName.value;
-    const taskTimeValue = taskTime.value;
-
-    if (taskNameValue.trim() !== 0 && isNaN(taskTimeValue)) {
+    if (taskName.value.trim() !== 0 && taskTime.value == 0) {
       return;
     }
 
-    const addTask = new Task(taskNameValue, taskTimeValue);
+    const addTask = new Task(taskName.value, taskTime.value);
     addTask.createNewTask();
     taskName.value = "";
     taskTime.value = "";
