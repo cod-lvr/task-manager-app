@@ -2,13 +2,13 @@ class Clock {
   constructor(tag, minute) {
     this.tag = tag;
     this.minute = minute;
-    this.timeOutId;
     this.startClock();
   }
 
   startClock() {
     this.timeConvert();
     this.clockTimer();
+    this.startTimeOut();
   }
 
   timeConvert() {
@@ -22,23 +22,29 @@ class Clock {
       this.rminutes = ` 0${this.rminutes}`;
     }
 
-    if (this.rminutes == 0) {
+    if (this.rminutes == -1 || isNaN(this.rminutes)) {
+      this.stopTimeOut();
       return;
     }
 
+    this.displayClock();
+    this.rminutes--;
+  }
+
+  displayClock() {
     document.getElementById(
       this.tag
     ).innerHTML = `Secounds Left : ${this.rminutes} `;
-
-    this.rminutes--;
-
-    this.startTimeOut();
   }
 
   startTimeOut() {
     this.timeOutId = setInterval(() => {
       this.clockTimer();
-    }, 100);
+    }, 1000);
+  }
+
+  stopTimeOut() {
+    clearInterval(this.startTimeOut);
   }
 }
 
@@ -48,7 +54,6 @@ class Task {
   constructor(taskName, taskTime) {
     this.taskName = taskName;
     this.taskTime = taskTime;
-    this.btnStatus = "start";
     this.taskId = Math.round(Math.random() * 6);
   }
 
@@ -61,12 +66,7 @@ class Task {
     taskEl.innerHTML = `
             <span id="radio">minutes: ${this.taskTime}</span>
             <h2>${this.taskName}</h2>
-            <button class="start-btn">${this.btnStatus}</button>
         `;
-
-    const startBtn = taskEl.querySelector("button");
-    // startBtn.addEventListener("click");
-
     taskList.append(taskEl);
     this.clockCounter();
   }
