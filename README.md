@@ -1,4 +1,3 @@
-# task-manager-app
 # project Details
 
 task-manager-app is a trial simple app using plain HTML, CSS, JS(OOP).
